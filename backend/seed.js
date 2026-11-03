@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const dns = require('dns');
 const Product = require('./models/Product');
+
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 dotenv.config();
 

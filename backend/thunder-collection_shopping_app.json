@@ -1,0 +1,210 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "Shopping App - Member 4 APIs",
+  "collectionId": "shopping-app-m4",
+  "dateExported": "2026-11-02",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "req_1_register",
+      "colId": "shopping-app-m4",
+      "name": "1. Register User (POST)",
+      "url": "http://localhost:5000/api/users",
+      "method": "POST",
+      "sortNum": 10000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\": \"Prasanth\",\n  \"emailId\": \"prasanth@example.com\",\n  \"age\": 20,\n  \"password\": \"student123\"\n}"
+      }
+    },
+    {
+      "_id": "req_2_login",
+      "colId": "shopping-app-m4",
+      "name": "2. Login User (POST)",
+      "url": "http://localhost:5000/api/login",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"emailId\": \"prasanth@example.com\",\n  \"password\": \"student123\"\n}"
+      }
+    },
+    {
+      "_id": "req_3_products",
+      "colId": "shopping-app-m4",
+      "name": "3. Get Products (GET)",
+      "url": "http://localhost:5000/api/products",
+      "method": "GET",
+      "sortNum": 30000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ]
+    },
+    {
+      "_id": "req_4_review_post",
+      "colId": "shopping-app-m4",
+      "name": "4. Submit Review & Rating (POST)",
+      "url": "http://localhost:5000/api/products/PROD001/reviews",
+      "method": "POST",
+      "sortNum": 40000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Excellent product, very high quality!\"\n}"
+      }
+    },
+    {
+      "_id": "req_5_review_get",
+      "colId": "shopping-app-m4",
+      "name": "5. Get Product Reviews (GET)",
+      "url": "http://localhost:5000/api/products/PROD001/reviews",
+      "method": "GET",
+      "sortNum": 50000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ]
+    },
+    {
+      "_id": "req_6_order_post",
+      "colId": "shopping-app-m4",
+      "name": "6. Place Order (POST)",
+      "url": "http://localhost:5000/api/orders",
+      "method": "POST",
+      "sortNum": 60000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"products\": [\n    {\n      \"productId\": \"PROD001\",\n      \"quantity\": 2\n    }\n  ]\n}"
+      }
+    },
+    {
+      "_id": "req_7_orders_get",
+      "colId": "shopping-app-m4",
+      "name": "7. View Order History (GET)",
+      "url": "http://localhost:5000/api/orders",
+      "method": "GET",
+      "sortNum": 70000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ]
+    },
+    {
+      "_id": "req_8_profile_put",
+      "colId": "shopping-app-m4",
+      "name": "8. Update Full Profile (PUT)",
+      "url": "http://localhost:5000/api/users?emailId=prasanth@example.com",
+      "method": "PUT",
+      "sortNum": 80000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\": \"Prasanth Murali\",\n  \"age\": 21\n}"
+      }
+    },
+    {
+      "_id": "req_9_profile_patch",
+      "colId": "shopping-app-m4",
+      "name": "9. Update Partial Profile (PATCH)",
+      "url": "http://localhost:5000/api/users?emailId=prasanth@example.com",
+      "method": "PATCH",
+      "sortNum": 90000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"age\": 22\n}"
+      }
+    },
+    {
+      "_id": "req_10_profile_delete",
+      "colId": "shopping-app-m4",
+      "name": "10. Delete Account (DELETE)",
+      "url": "http://localhost:5000/api/users?emailId=prasanth@example.com",
+      "method": "DELETE",
+      "sortNum": 100000,
+      "created": "2026-11-02",
+      "modified": "2026-11-02",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "prasanth@example.com"
+        }
+      ]
+    }
+  ]
+}

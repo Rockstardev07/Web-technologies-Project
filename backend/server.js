@@ -4,6 +4,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
+const dns = require('dns');
+
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -28,6 +31,12 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', authRoutes);
+
+const reviewRoutesPath = path.join(__dirname, 'routes', 'reviewRoutes.js');
+if (fs.existsSync(reviewRoutesPath)) {
+  app.use('/api', require(reviewRoutesPath));
+}
+
 app.use('/api/products', productRoutes);
 
 const userRoutesPath = path.join(__dirname, 'routes', 'userRoutes.js');
@@ -38,11 +47,6 @@ if (fs.existsSync(userRoutesPath)) {
 const orderRoutesPath = path.join(__dirname, 'routes', 'orderRoutes.js');
 if (fs.existsSync(orderRoutesPath)) {
   app.use('/api/orders', require(orderRoutesPath));
-}
-
-const reviewRoutesPath = path.join(__dirname, 'routes', 'reviewRoutes.js');
-if (fs.existsSync(reviewRoutesPath)) {
-  app.use('/api', require(reviewRoutesPath));
 }
 
 app.use((req, res) => {
