@@ -60,7 +60,7 @@ export default function Login() {
     <div className="auth-outer-screen">
       <div className="auth-brand-masthead">
         <Link to="/" className="auth-logo">
-          Shop<span>Ease</span>
+          Kaadugal<span className="brand-domain">.in</span>
         </Link>
       </div>
 
@@ -104,17 +104,17 @@ export default function Login() {
         </form>
 
         <div className="auth-disclaimer">
-          By signing in, you agree to ShopEase's Terms of Service and Privacy Policy.
+          By signing in, you agree to Kaadugal.in's Terms of Service and Privacy Policy.
         </div>
       </div>
 
       <div className="auth-divider-box">
-        <h5>New to ShopEase?</h5>
+        <h5>New to Kaadugal.in?</h5>
       </div>
 
       <div className="auth-secondary-action">
         <Link to="/register" className="auth-register-link-btn">
-          Create your ShopEase account
+          Create your Kaadugal.in account
         </Link>
       </div>
     </div>

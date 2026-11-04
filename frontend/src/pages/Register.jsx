@@ -65,7 +65,7 @@ export default function Register() {
     <div className="auth-outer-screen">
       <div className="auth-brand-masthead">
         <Link to="/" className="auth-logo">
-          Shop<span>Ease</span>
+          Kaadugal<span className="brand-domain">.in</span>
         </Link>
       </div>
 
@@ -137,7 +137,7 @@ export default function Register() {
         </form>
 
         <div className="auth-disclaimer">
-          By creating an account, you agree to ShopEase's Conditions of Use and Privacy Notice.
+          By creating an account, you agree to Kaadugal.in's Conditions of Use and Privacy Notice.
         </div>
 
         <div className="auth-card-switch">

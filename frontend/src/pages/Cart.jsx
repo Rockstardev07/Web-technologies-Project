@@ -46,7 +46,7 @@ export default function Cart() {
   return (
     <main className="cart-page">
       <header className="cart-page-header">
-        <div><p className="cart-eyebrow">SHOPEASE CHECKOUT</p><h1>Shopping cart</h1></div>
+        <div><p className="cart-eyebrow">KAADUGAL CHECKOUT</p><h1>Shopping cart</h1></div>
         {!confirmation && items.length > 0 && <button className="cart-clear-button" type="button" onClick={clearCart}>Clear cart</button>}
       </header>
 

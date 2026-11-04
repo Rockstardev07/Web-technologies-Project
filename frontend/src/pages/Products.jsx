@@ -68,29 +68,28 @@ export default function Products() {
 
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((item) => {
-    const itemCat = (item.category || "").toLowerCase();
-    const itemName = (item.productName || item.name || "").toLowerCase();
-    const itemPrice = Number(item.productPrice ?? item.price ?? 0);
-    const itemRating = Number(item.productRating ?? item.rating ?? 0);
-    const minimum = minPrice === "" ? 0 : Number(minPrice);
-    const maximum = maxPrice === "" ? Number.POSITIVE_INFINITY : Number(maxPrice);
+      const itemCat = (item.category || "").toLowerCase();
+      const itemName = (item.productName || item.name || "").toLowerCase();
+      const itemPrice = Number(item.productPrice ?? item.price ?? 0);
+      const itemRating = Number(item.productRating ?? item.rating ?? 0);
+      const minimum = minPrice === "" ? 0 : Number(minPrice);
+      const maximum = maxPrice === "" ? Number.POSITIVE_INFINITY : Number(maxPrice);
 
-    const matchesCategory =
-      selectedCategory === "All" ||
-      itemCat === selectedCategory.toLowerCase();
+      const matchesCategory =
+        selectedCategory === "All" ||
+        itemCat === selectedCategory.toLowerCase();
 
-    const matchesSearch = itemName.includes(searchQuery.toLowerCase());
-    const matchesPrice = itemPrice >= minimum && itemPrice <= maximum;
-    const matchesRating = minRating === "" || itemRating >= Number(minRating);
+      const matchesSearch = itemName.includes(searchQuery.toLowerCase());
+      const matchesPrice = itemPrice >= minimum && itemPrice <= maximum;
+      const matchesRating = minRating === "" || itemRating >= Number(minRating);
 
-    return matchesCategory && matchesSearch && matchesPrice && matchesRating;
+      return matchesCategory && matchesSearch && matchesPrice && matchesRating;
     });
     if (sortOrder === "price-asc") filtered.sort((a, b) => Number(a.price ?? a.productPrice ?? 0) - Number(b.price ?? b.productPrice ?? 0));
     if (sortOrder === "price-desc") filtered.sort((a, b) => Number(b.price ?? b.productPrice ?? 0) - Number(a.price ?? a.productPrice ?? 0));
     return filtered;
   }, [products, selectedCategory, searchQuery, minPrice, maxPrice, minRating, sortOrder]);
 
-  // Handle adding a product to cart
   const handleAddToCart = (item) => {
     const added = addToCart(item);
     if (added) {
@@ -103,99 +102,99 @@ export default function Products() {
   return (
     <div className="store-page-wrapper">
       <Navbar
-        activeCategory={selectedCategory}
-        onCategorySelect={setSelectedCategory}
         onSearch={setSearchQuery}
         searchValue={searchQuery}
       />
 
-      <section className="store-billboard">
-        <div className="billboard-container">
-          <h2>Exclusive Clearance & New Arrivals</h2>
-          <p>
-            Authentic brands, verified seller inventory, and same-day handling
-            across all departments.
-          </p>
-        </div>
-      </section>
+      <div className="store-page-content">
+        <header className="store-page-header">
+          <div>
+            <p className="store-eyebrow">KAADUGAL CATALOG</p>
+            <h1>Products</h1>
+            <p>Authentic brands, verified seller inventory, and reliable handling across all departments.</p>
+          </div>
+        </header>
 
-      <div className="store-viewport">
-        <aside className="store-sidebar">
-          <div className="sidebar-header">
-            <h4>Filters</h4>
+        <div className="store-viewport">
+          <aside className="store-sidebar">
+            <div className="sidebar-header">
+              <h4>Filters</h4>
 
-            {(selectedCategory !== "All" || searchQuery || minPrice !== "" ||
-              maxPrice !== "2500" || minRating !== "" || sortOrder !== "") && (
-              <button
-                onClick={handleClearFilters}
-                className="clear-filters-link"
-              >
-                Clear all
-              </button>
+              {(selectedCategory !== "All" || searchQuery || minPrice !== "" ||
+                maxPrice !== "2500" || minRating !== "" || sortOrder !== "") && (
+                <button
+                  onClick={handleClearFilters}
+                  className="clear-filters-link"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
+
+            <SearchFilter
+              showSearchCategory={true}
+              category={selectedCategory}
+              onCategoryChange={setSelectedCategory}
+              categories={categories}
+              minPrice={minPrice}
+              onMinPriceChange={setMinPrice}
+              maxPrice={maxPrice}
+              onMaxPriceChange={setMaxPrice}
+              minRating={minRating}
+              onMinRatingChange={setMinRating}
+              sortOrder={sortOrder}
+              onSortOrderChange={setSortOrder}
+              resultCount={filteredProducts.length}
+              showResultCount={false}
+              onClear={handleClearFilters}
+            />
+          </aside>
+
+          <main className="store-catalog-panel">
+            <div className="catalog-headline-strip">
+              <span>
+                Showing <strong>{filteredProducts.length}</strong> of{" "}
+                <strong>{products.length}</strong> items
+              </span>
+            </div>
+
+            {loading ? (
+              <div className="catalog-feedback-card">
+                <div className="spinner-circle"></div>
+                <p>Loading available products...</p>
+              </div>
+            ) : error ? (
+              <div className="catalog-feedback-card feedback-error">
+                <p>{error}</p>
+
+                <button onClick={fetchProducts} className="retry-btn">
+                  Retry
+                </button>
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="catalog-feedback-card">
+                <h3>No products found</h3>
+                <p>
+                  No products match your current search and filter settings.
+                </p>
+
+                <button onClick={handleClearFilters} className="retry-btn">
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <div className="product-multi-grid">
+                {filteredProducts.map((prod, idx) => (
+                  <ProductCard
+                    key={prod.productId || prod._id || idx}
+                    product={prod}
+                    onAddToCart={handleAddToCart}
+                  />
+                ))}
+              </div>
             )}
-          </div>
-
-          <SearchFilter
-            showSearchCategory={false}
-            categories={categories}
-            minPrice={minPrice}
-            onMinPriceChange={setMinPrice}
-            maxPrice={maxPrice}
-            onMaxPriceChange={setMaxPrice}
-            minRating={minRating}
-            onMinRatingChange={setMinRating}
-            sortOrder={sortOrder}
-            onSortOrderChange={setSortOrder}
-            resultCount={filteredProducts.length}
-            showResultCount={false}
-            onClear={handleClearFilters}
-          />
-        </aside>
-
-        <main className="store-catalog-panel">
-          <div className="catalog-headline-strip">
-            <span>
-              Showing <strong>{filteredProducts.length}</strong> of{" "}
-              <strong>{products.length}</strong> items
-            </span>
-          </div>
-
-          {loading ? (
-            <div className="catalog-feedback-card">
-              <div className="spinner-circle"></div>
-              <p>Loading available products...</p>
-            </div>
-          ) : error ? (
-            <div className="catalog-feedback-card feedback-error">
-              <p>{error}</p>
-
-              <button onClick={fetchProducts} className="retry-btn">
-                Retry
-              </button>
-            </div>
-          ) : filteredProducts.length === 0 ? (
-            <div className="catalog-feedback-card">
-              <h3>No products found</h3>
-              <p>
-                No products match your current search and filter settings.
-              </p>
-
-              <button onClick={handleClearFilters} className="retry-btn">
-                Reset Filters
-              </button>
-            </div>
-          ) : (
-            <div className="product-multi-grid">
-              {filteredProducts.map((prod, idx) => (
-                <ProductCard
-                  key={prod.productId || prod._id || idx}
-                  product={prod}
-                  onAddToCart={handleAddToCart}
-                />
-              ))}
-            </div>
-          )}
-        </main>
+          </main>
+        </div>
       </div>
     </div>
   );

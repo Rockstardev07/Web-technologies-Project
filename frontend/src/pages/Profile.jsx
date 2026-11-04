@@ -66,7 +66,7 @@ export default function Profile() {
     setForm((current) => ({ ...current, [event.target.name]: event.target.value }))
   }
 
-  async function saveProfile(method) {
+  async function saveProfile() {
     setError('')
     setMessage('')
     const token = localStorage.getItem('token')
@@ -75,22 +75,15 @@ export default function Profile() {
       return
     }
     const complete = { username: form.username.trim(), age: Number(form.age) }
-    const body = method === 'PUT' ? complete : Object.fromEntries(
-      Object.entries(complete).filter(([key, value]) => String(value) !== String(profile[key])),
-    )
-    if (method === 'PATCH' && Object.keys(body).length === 0) {
-      setError('No profile fields have changed.')
-      return
-    }
     setSaving(true)
     try {
       const response = await fetch(`${API_URL}/api/users?emailId=${encodeURIComponent(profile.email)}`, {
-        method,
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(body),
+        body: JSON.stringify(complete),
       })
       const data = await response.json().catch(() => ({}))
-      if (!response.ok) throw new Error(data.message || `Unable to save your profile (${method}).`)
+      if (!response.ok) throw new Error(data.message || 'Unable to save your profile.')
       const user = data.user || {}
       const nextProfile = {
         username: user.username ?? complete.username,
@@ -101,9 +94,12 @@ export default function Profile() {
       setForm(nextProfile)
       setEditing(false)
       localStorage.setItem('user', JSON.stringify({ ...user, ...nextProfile, emailId: nextProfile.email }))
-      setMessage(data.message || 'Your profile was updated successfully.')
+      setMessage('User profile updated successfully.')
     } catch (cause) {
-      setError(cause.message || 'Unable to update your profile.')
+      const cleanError = (cause.message || 'Unable to update your profile.')
+        .replace(/\s*using\s*(PUT|PATCH)/gi, '')
+        .replace(/\s*\((PUT|PATCH)\)/gi, '')
+      setError(cleanError)
     } finally {
       setSaving(false)
     }
@@ -129,7 +125,7 @@ export default function Profile() {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       setDeleted(true)
-      setMessage(data.message || 'Your account was deleted successfully.')
+      setMessage('Your account was deleted successfully.')
     } catch (cause) {
       setError(cause.message || 'Unable to delete your account.')
     } finally {
@@ -145,38 +141,59 @@ export default function Profile() {
 
   return (
     <main className="profile-page">
-      <header className="profile-heading"><p className="profile-kicker">ACCOUNT SETTINGS</p><h1>Your profile</h1><p>View and manage your ShopEase account details.</p></header>
+      <header className="profile-heading">
+        <p className="profile-kicker">ACCOUNT SETTINGS</p>
+        <h1>Your profile</h1>
+        <p>View and manage your Kaadugal account details.</p>
+      </header>
       {error && <p className="profile-alert profile-alert-error" role="alert">{error}</p>}
       {message && <p className="profile-alert profile-alert-success" role="status">{message}</p>}
-      {loading ? <p className="profile-loading" role="status">Loading profile…</p> : deleted ? (
-        <section className="profile-card profile-deleted"><h2>Account deleted</h2><p>Your account and sign-in session have been removed.</p><Link to="/register">Create a new account</Link></section>
+      {loading ? (
+        <p className="profile-loading" role="status">Loading profile…</p>
+      ) : deleted ? (
+        <section className="profile-card profile-deleted">
+          <h2>Account deleted</h2>
+          <p>Your account and sign-in session have been removed.</p>
+          <Link to="/register">Create a new account</Link>
+        </section>
       ) : (
         <section className="profile-card">
-          {!editing ? <>
-            <dl className="profile-details">
-              <div><dt>Username</dt><dd>{profile.username || '—'}</dd></div>
-              <div><dt>Email address</dt><dd>{profile.email || '—'}</dd></div>
-              <div><dt>Age</dt><dd>{profile.age || '—'}</dd></div>
-            </dl>
-            <div className="profile-actions">
-              <button type="button" className="profile-primary-button" onClick={() => setEditing(true)}>Edit profile</button>
-              <button type="button" className="profile-delete-button" onClick={deleteAccount} disabled={deleting}>{deleting ? 'Deleting…' : 'Delete account'}</button>
-            </div>
-          </> : <form className="profile-edit-form" onSubmit={(event) => { event.preventDefault(); saveProfile('PUT') }}>
-            <h2>Edit account details</h2>
-            <label htmlFor="profile-username">Username</label>
-            <input id="profile-username" name="username" value={form.username} onChange={updateField} minLength="2" required />
-            <label htmlFor="profile-email">Email address</label>
-            <input id="profile-email" name="email" type="email" value={form.email} readOnly aria-describedby="profile-email-note" />
-            <small id="profile-email-note">Email changes are not supported by the current profile API.</small>
-            <label htmlFor="profile-age">Age</label>
-            <input id="profile-age" name="age" type="number" min="1" value={form.age} onChange={updateField} required />
-            <div className="profile-actions">
-              <button type="submit" className="profile-primary-button" disabled={saving}>{saving ? 'Saving…' : 'Save all (PUT)'}</button>
-              <button type="button" className="profile-secondary-button" onClick={() => saveProfile('PATCH')} disabled={saving}>Save changed fields (PATCH)</button>
-              <button type="button" className="profile-secondary-button" onClick={cancelEditing} disabled={saving}>Cancel</button>
-            </div>
-          </form>}
+          {!editing ? (
+            <>
+              <dl className="profile-details">
+                <div><dt>Username</dt><dd>{profile.username || '—'}</dd></div>
+                <div><dt>Email address</dt><dd>{profile.email || '—'}</dd></div>
+                <div><dt>Age</dt><dd>{profile.age || '—'}</dd></div>
+              </dl>
+              <div className="profile-actions">
+                <button type="button" className="profile-primary-button" onClick={() => setEditing(true)}>
+                  Edit profile
+                </button>
+                <button type="button" className="profile-delete-button" onClick={deleteAccount} disabled={deleting}>
+                  {deleting ? 'Deleting…' : 'Delete account'}
+                </button>
+              </div>
+            </>
+          ) : (
+            <form className="profile-edit-form" onSubmit={(event) => { event.preventDefault(); saveProfile() }}>
+              <h2>Edit account details</h2>
+              <label htmlFor="profile-username">Username</label>
+              <input id="profile-username" name="username" value={form.username} onChange={updateField} minLength="2" required />
+              <label htmlFor="profile-email">Email address</label>
+              <input id="profile-email" name="email" type="email" value={form.email} readOnly aria-describedby="profile-email-note" />
+              <small id="profile-email-note">Email changes are not supported by the current profile API.</small>
+              <label htmlFor="profile-age">Age</label>
+              <input id="profile-age" name="age" type="number" min="1" value={form.age} onChange={updateField} required />
+              <div className="profile-actions">
+                <button type="submit" className="profile-primary-button" disabled={saving}>
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+                <button type="button" className="profile-secondary-button" onClick={cancelEditing} disabled={saving}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
         </section>
       )}
     </main>

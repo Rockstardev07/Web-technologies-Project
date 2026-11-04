@@ -91,7 +91,7 @@ export default function ProductReviews({ productId, initialRating = 0, onRatingC
         <div className="reviews-list">
           {reviews.map((review, index) => (
             <article className="review-item" key={review._id || `${review.username}-${index}`}>
-              <div className="review-item-header"><strong>{review.username || 'ShopEase customer'}</strong><span>{review.rating} / 5 <span className="reviews-star" aria-hidden="true">★</span></span></div>
+              <div className="review-item-header"><strong>{review.username || 'Kaadugal customer'}</strong><span>{review.rating} / 5 <span className="reviews-star" aria-hidden="true">★</span></span></div>
               <p>{review.comment || 'No written comment.'}</p>
               {review.createdAt && <time dateTime={review.createdAt}>{new Date(review.createdAt).toLocaleDateString()}</time>}
             </article>

@@ -1,6 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+const money = (amount) =>
+  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(
+    Number(amount) || 0
+  );
+
 export default function ProductCard({ product, onAddToCart }) {
   const id = product.productId || product._id || "N/A";
   const name = product.productName || product.name || "Untitled Product";
@@ -13,15 +18,10 @@ export default function ProductCard({ product, onAddToCart }) {
     product.image ||
     "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80";
 
-  const originalPrice = (price * 1.25).toFixed(2);
   const isInStock = quantity > 0;
 
   return (
     <article className="store-product-card">
-      <div className="card-top-tag">
-        <span className="tag-pill">Limited time deal</span>
-      </div>
-
       <div className="card-media-box">
         <img src={image} alt={name} loading="lazy" />
       </div>
@@ -49,16 +49,7 @@ export default function ProductCard({ product, onAddToCart }) {
         </div>
 
         <div className="item-pricing">
-          <span className="price-curr">$</span>
-          <span className="price-whole">{Math.floor(price)}</span>
-          <span className="price-fraction">{(price % 1).toFixed(2).substring(2)}</span>
-          <span className="price-mrp">${originalPrice}</span>
-          <span className="price-saving">(20% off)</span>
-        </div>
-
-        <div className="shipping-promise">
-          <span className="expedited-label">⚡FastTrack</span>
-          <span className="arrival-date">FREE delivery <strong>Tomorrow</strong></span>
+          <strong className="item-price">{money(price)}</strong>
         </div>
 
         <div className="item-inventory">

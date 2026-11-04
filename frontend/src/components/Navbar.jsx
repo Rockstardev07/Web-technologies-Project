@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
-export default function Navbar({ onSearch, onCategorySelect, activeCategory = "All", searchValue }) {
+export default function Navbar({ onSearch, searchValue }) {
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const token = localStorage.getItem("token");
@@ -12,16 +12,6 @@ export default function Navbar({ onSearch, onCategorySelect, activeCategory = "A
   useEffect(() => {
     if (searchValue !== undefined) setSearchTerm(searchValue);
   }, [searchValue]);
-
-  const categories = [
-    "All",
-    "Electronics",
-    "Fashion",
-    "Home & Kitchen",
-    "Books",
-    "Beauty",
-    "Sports",
-  ];
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -36,33 +26,15 @@ export default function Navbar({ onSearch, onCategorySelect, activeCategory = "A
 
   return (
     <header className="market-header">
-      {/* Primary Top Bar */}
+      {/* Simple Top Bar */}
       <div className="nav-main">
         {/* Brand / Logo */}
         <Link to="/products" className="nav-brand">
-          Shop<span>Ease</span>
-          <span className="brand-domain">.in</span>
+          Kaadugal<span className="brand-domain">.in</span>
         </Link>
 
-        {/* Delivery Indicator */}
-        <div className="nav-delivery-pill">
-          <span className="nav-subtext">Deliver to</span>
-          <span className="nav-boldtext">Select Location</span>
-        </div>
-
-        {/* Search Engine Bar */}
+        {/* Clean Search Input */}
         <form className="nav-search-wrapper" onSubmit={handleSearchSubmit}>
-          <select
-            className="search-scope-select"
-            value={activeCategory}
-            onChange={(e) => onCategorySelect && onCategorySelect(e.target.value)}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
           <input
             type="text"
             placeholder="Search products by name..."
@@ -112,22 +84,6 @@ export default function Navbar({ onSearch, onCategorySelect, activeCategory = "A
           </Link>
         </div>
       </div>
-
-      {/* Sub-strip Bar */}
-      <nav className="nav-substrip">
-        <span className="substrip-all-trigger">☰ All Departments</span>
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`substrip-link ${activeCategory === cat ? "active" : ""}`}
-            onClick={() => onCategorySelect && onCategorySelect(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-        <span className="substrip-promolink">Today's Deals</span>
-        <span className="substrip-promolink">Customer Service</span>
-      </nav>
     </header>
   );
 }
