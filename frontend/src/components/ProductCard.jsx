@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function ProductCard({ product, onAddToCart }) {
   const id = product.productId || product._id || "N/A";
@@ -34,6 +35,9 @@ export default function ProductCard({ product, onAddToCart }) {
         <h3 className="item-title" title={name}>
           {name}
         </h3>
+        <Link to={`/products/${encodeURIComponent(id)}`} className="product-card-details-link">
+          View product details
+        </Link>
 
         <p className="item-description" title={description}>
           {description}

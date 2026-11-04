@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
-export default function Navbar({ onSearch, onCategorySelect, activeCategory = "All" }) {
+export default function Navbar({ onSearch, onCategorySelect, activeCategory = "All", searchValue }) {
   const navigate = useNavigate();
+  const { cartCount } = useCart();
   const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (searchValue !== undefined) setSearchTerm(searchValue);
+  }, [searchValue]);
 
   const categories = [
     "All",
@@ -100,7 +106,7 @@ export default function Navbar({ onSearch, onCategorySelect, activeCategory = "A
           <Link to="/cart" className="nav-cart-link">
             <div className="cart-icon-group">
               <span className="cart-svg-wrap">🛒</span>
-              <span className="cart-count-badge">0</span>
+              <span className="cart-count-badge">{cartCount}</span>
             </div>
             <span className="nav-boldtext cart-text">Cart</span>
           </Link>
