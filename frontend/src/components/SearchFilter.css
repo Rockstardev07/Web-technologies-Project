@@ -1,0 +1,9 @@
+.search-filter-panel { display:grid; gap:15px; padding:16px; border:1px solid var(--border-line,#d5d9d9); border-radius:6px; background:var(--surface-white,#fff); }
+.search-filter-field { display:grid; gap:6px; min-width:0; color:var(--text-primary,#0f1111); font-size:12px; font-weight:600; }
+.search-filter-field input,.search-filter-field select { width:100%; min-height:36px; border:1px solid #a6a6a6; border-radius:4px; padding:7px 9px; background:white; color:inherit; font-size:13px; }
+.search-filter-field input:focus,.search-filter-field select:focus { outline:2px solid var(--hyperlink,#007185); outline-offset:1px; }
+.search-filter-price-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.search-filter-footer { display:flex; justify-content:space-between; align-items:center; gap:8px; padding-top:12px; border-top:1px solid #eaeded; color:var(--text-muted,#565959); font-size:12px; }
+.search-filter-footer button { border:0; padding:5px 0; background:transparent; color:var(--hyperlink,#007185); cursor:pointer; font-size:12px; }
+.search-filter-footer button:hover { color:#c7511f; text-decoration:underline; }
+@media(max-width:420px) { .search-filter-price-row { grid-template-columns:1fr; } .search-filter-footer { align-items:flex-start; flex-direction:column; } }

@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import ProductCard from "../components/ProductCard";
+import SearchFilter from "../components/SearchFilter";
+import { useCart } from "../context/CartContext";
 
 export default function Products() {
+  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [maxPrice, setMaxPrice] = useState(2500);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("2500");
+  const [minRating, setMinRating] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -22,20 +28,24 @@ export default function Products() {
       setLoading(true);
       setError("");
       const token = localStorage.getItem("token");
-
       const res = await axios.get(`${API_URL}/api/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const list = Array.isArray(res.data) ? res.data : res.data?.products || [];
+      const list = Array.isArray(res.data)
+        ? res.data
+        : res.data?.products || [];
+
       setProducts(list);
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 403) {
         setError("Unauthorized access. Please log in again.");
       } else {
-        setError(err.response?.data?.message || "Failed to load product inventory.");
+        setError(
+          err.response?.data?.message || "Failed to load product inventory."
+        );
       }
     } finally {
       setLoading(false);
@@ -45,35 +55,66 @@ export default function Products() {
   const handleClearFilters = () => {
     setSelectedCategory("All");
     setSearchQuery("");
-    setMaxPrice(2500);
+    setMinPrice("");
+    setMaxPrice("2500");
+    setMinRating("");
+    setSortOrder("");
   };
 
-  const filteredProducts = products.filter((item) => {
+  const categories = useMemo(
+    () => ["All", ...new Set(products.map((item) => item.category).filter(Boolean))],
+    [products]
+  );
+
+  const filteredProducts = useMemo(() => {
+    const filtered = products.filter((item) => {
     const itemCat = (item.category || "").toLowerCase();
     const itemName = (item.productName || item.name || "").toLowerCase();
-    const itemPrice = Number(item.productPrice || item.price || 0);
+    const itemPrice = Number(item.productPrice ?? item.price ?? 0);
+    const itemRating = Number(item.productRating ?? item.rating ?? 0);
+    const minimum = minPrice === "" ? 0 : Number(minPrice);
+    const maximum = maxPrice === "" ? Number.POSITIVE_INFINITY : Number(maxPrice);
 
     const matchesCategory =
-      selectedCategory === "All" || itemCat === selectedCategory.toLowerCase();
-    const matchesSearch = itemName.includes(searchQuery.toLowerCase());
-    const matchesPrice = itemPrice <= maxPrice;
+      selectedCategory === "All" ||
+      itemCat === selectedCategory.toLowerCase();
 
-    return matchesCategory && matchesSearch && matchesPrice;
-  });
+    const matchesSearch = itemName.includes(searchQuery.toLowerCase());
+    const matchesPrice = itemPrice >= minimum && itemPrice <= maximum;
+    const matchesRating = minRating === "" || itemRating >= Number(minRating);
+
+    return matchesCategory && matchesSearch && matchesPrice && matchesRating;
+    });
+    if (sortOrder === "price-asc") filtered.sort((a, b) => Number(a.price ?? a.productPrice ?? 0) - Number(b.price ?? b.productPrice ?? 0));
+    if (sortOrder === "price-desc") filtered.sort((a, b) => Number(b.price ?? b.productPrice ?? 0) - Number(a.price ?? a.productPrice ?? 0));
+    return filtered;
+  }, [products, selectedCategory, searchQuery, minPrice, maxPrice, minRating, sortOrder]);
+
+  // Handle adding a product to cart
+  const handleAddToCart = (item) => {
+    const added = addToCart(item);
+    if (added) {
+      alert("Product added to cart successfully!");
+    } else {
+      alert("Unable to add product. Check available stock.");
+    }
+  };
 
   return (
-    <div className="store-page-canvas">
+    <div className="store-page-wrapper">
       <Navbar
-        onSearch={setSearchQuery}
-        onCategorySelect={setSelectedCategory}
         activeCategory={selectedCategory}
+        onCategorySelect={setSelectedCategory}
+        onSearch={setSearchQuery}
+        searchValue={searchQuery}
       />
 
       <section className="store-billboard">
         <div className="billboard-container">
           <h2>Exclusive Clearance & New Arrivals</h2>
           <p>
-            Authentic brands, verified seller inventory, and same-day handling across all departments.
+            Authentic brands, verified seller inventory, and same-day handling
+            across all departments.
           </p>
         </div>
       </section>
@@ -82,50 +123,33 @@ export default function Products() {
         <aside className="store-sidebar">
           <div className="sidebar-header">
             <h4>Filters</h4>
-            {(selectedCategory !== "All" || searchQuery || maxPrice < 2500) && (
-              <button onClick={handleClearFilters} className="clear-filters-link">
+
+            {(selectedCategory !== "All" || searchQuery || minPrice !== "" ||
+              maxPrice !== "2500" || minRating !== "" || sortOrder !== "") && (
+              <button
+                onClick={handleClearFilters}
+                className="clear-filters-link"
+              >
                 Clear all
               </button>
             )}
           </div>
 
-          <div className="filter-group">
-            <h5>Category</h5>
-            <ul className="category-selection-list">
-              {["All", "Electronics", "Fashion", "Home & Kitchen", "Books", "Beauty"].map(
-                (cat) => (
-                  <li
-                    key={cat}
-                    className={selectedCategory === cat ? "is-selected" : ""}
-                    onClick={() => setSelectedCategory(cat)}
-                  >
-                    {cat}
-                  </li>
-                )
-              )}
-            </ul>
-          </div>
-
-          <div className="filter-group">
-            <h5>Price Range</h5>
-            <input
-              type="range"
-              min="10"
-              max="2500"
-              step="50"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-            />
-            <div className="price-range-label">
-              Up to <strong>${maxPrice}</strong>
-            </div>
-          </div>
-
-          <div className="filter-group">
-            <h5>Customer Reviews</h5>
-            <div className="rating-filter-pill">★★★★☆ & Up</div>
-            <div className="rating-filter-pill">★★★☆☆ & Up</div>
-          </div>
+          <SearchFilter
+            showSearchCategory={false}
+            categories={categories}
+            minPrice={minPrice}
+            onMinPriceChange={setMinPrice}
+            maxPrice={maxPrice}
+            onMaxPriceChange={setMaxPrice}
+            minRating={minRating}
+            onMinRatingChange={setMinRating}
+            sortOrder={sortOrder}
+            onSortOrderChange={setSortOrder}
+            resultCount={filteredProducts.length}
+            showResultCount={false}
+            onClear={handleClearFilters}
+          />
         </aside>
 
         <main className="store-catalog-panel">
@@ -144,6 +168,7 @@ export default function Products() {
           ) : error ? (
             <div className="catalog-feedback-card feedback-error">
               <p>{error}</p>
+
               <button onClick={fetchProducts} className="retry-btn">
                 Retry
               </button>
@@ -151,7 +176,10 @@ export default function Products() {
           ) : filteredProducts.length === 0 ? (
             <div className="catalog-feedback-card">
               <h3>No products found</h3>
-              <p>No products match your current search and filter settings.</p>
+              <p>
+                No products match your current search and filter settings.
+              </p>
+
               <button onClick={handleClearFilters} className="retry-btn">
                 Reset Filters
               </button>
@@ -162,9 +190,7 @@ export default function Products() {
                 <ProductCard
                   key={prod.productId || prod._id || idx}
                   product={prod}
-                  onAddToCart={(item) => {
-                    console.log("Cart integration link for Member 2:", item);
-                  }}
+                  onAddToCart={handleAddToCart}
                 />
               ))}
             </div>
