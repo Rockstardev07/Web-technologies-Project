@@ -11,7 +11,7 @@ const sampleProducts = [
   {
     productId: 'PROD001',
     name: 'Wireless Noise-Canceling Headphones',
-    price: 129.99,
+    price: 2999,
     category: 'Electronics',
     availableQuantity: 35,
     description: 'Premium over-ear wireless headphones with active noise cancellation, 30-hour battery life, and crystal-clear sound quality.',
@@ -33,7 +33,7 @@ const sampleProducts = [
   {
     productId: 'PROD002',
     name: 'Smart Fitness Watch',
-    price: 79.99,
+    price: 1999,
     category: 'Electronics',
     availableQuantity: 20,
     description: 'Track your steps, heart rate, sleep stages, and workout metrics with a vibrant AMOLED touchscreen and 7-day battery life.',
@@ -50,7 +50,7 @@ const sampleProducts = [
   {
     productId: 'PROD003',
     name: 'Ergonomic Mechanical Keyboard',
-    price: 99.50,
+    price: 2499,
     category: 'Electronics',
     availableQuantity: 15,
     description: 'Customizable RGB mechanical gaming and typing keyboard with tactile switches and durable aluminum frame.',
@@ -67,7 +67,7 @@ const sampleProducts = [
   {
     productId: 'PROD004',
     name: 'Portable Bluetooth Speaker',
-    price: 49.99,
+    price: 1499,
     category: 'Electronics',
     availableQuantity: 50,
     description: 'Compact IPX7 waterproof Bluetooth speaker delivering deep bass and 360-degree sound for outdoor adventures.',
@@ -84,7 +84,7 @@ const sampleProducts = [
   {
     productId: 'PROD005',
     name: 'Classic Denim Jacket',
-    price: 64.99,
+    price: 1799,
     category: 'Clothing',
     availableQuantity: 25,
     description: 'Timeless denim jacket tailored with premium cotton denim, button-front closure, and practical front chest pockets.',
@@ -101,7 +101,7 @@ const sampleProducts = [
   {
     productId: 'PROD006',
     name: 'Organic Cotton Crewneck T-Shirt',
-    price: 24.99,
+    price: 699,
     category: 'Clothing',
     availableQuantity: 60,
     description: 'Breathable, ultra-soft 100% organic cotton everyday essential t-shirt designed for all-day comfort and durability.',
@@ -118,7 +118,7 @@ const sampleProducts = [
   {
     productId: 'PROD007',
     name: 'Performance Running Shoes',
-    price: 89.99,
+    price: 2499,
     category: 'Footwear',
     availableQuantity: 18,
     description: 'Lightweight road running shoes with responsive foam cushioning, breathable mesh upper, and high-traction rubber outsole.',
@@ -135,7 +135,7 @@ const sampleProducts = [
   {
     productId: 'PROD008',
     name: 'Casual Canvas Sneakers',
-    price: 45.00,
+    price: 999,
     category: 'Footwear',
     availableQuantity: 0,
     description: 'Versatile low-top canvas sneakers with cushioned insole and vulcanized rubber sole for effortless casual style.',
@@ -152,7 +152,7 @@ const sampleProducts = [
   {
     productId: 'PROD009',
     name: 'Minimalist Travel Backpack',
-    price: 59.99,
+    price: 1299,
     category: 'Accessories',
     availableQuantity: 30,
     description: 'Water-resistant everyday commuter backpack with dedicated 15.6-inch laptop compartment and hidden anti-theft pocket.',
@@ -169,7 +169,7 @@ const sampleProducts = [
   {
     productId: 'PROD010',
     name: 'Stainless Steel Insulated Water Bottle',
-    price: 19.99,
+    price: 599,
     category: 'Accessories',
     availableQuantity: 45,
     description: 'Double-walled vacuum insulated 750ml flask that keeps drinks ice cold for 24 hours or piping hot for 12 hours.',

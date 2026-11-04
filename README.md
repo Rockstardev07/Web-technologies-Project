@@ -1,102 +1,61 @@
+# Kaadugal.in — Shopping Application
 
-# Shopping Application
+A full-stack e-commerce shopping application developed using the **MERN** stack (**MongoDB, Express.js, React.js, Node.js**) with **Vite**. The application provides end-to-end e-commerce capabilities including user authentication, real-time product browsing and filtering, product reviews, cart management with stock guard rails, order checkout, and user profile management.
 
-A full-stack shopping application developed using **React.js, Node.js, Express.js, and MongoDB**. It provides user authentication, product browsing, shopping cart management, product reviews, and order management.
+---
 
-## Features
+## 🛠️ Tech Stack
 
-- **User Authentication:** User registration, login, password hashing, and JWT-based authentication.
-- **Product Display:** View products with details, images, prices, categories, and stock availability.
-- **Shopping Cart:** Add, remove, and update product quantities with automatic total calculation.
-- **Search & Filters:** Search products by name and filter by category, rating, and price.
-- **Product Reviews:** View and submit product ratings and reviews.
-- **User Profile:** View, update, and delete user profile information.
-- **Order Management:** Place orders and view previous order history.
-- **Stock Management:** Validate product availability and update stock after successful orders.
+- **Frontend**: React.js 18, Vite, React Router DOM 6, Axios, Pure CSS3
+- **Backend**: Node.js, Express.js 5
+- **Database**: MongoDB, Mongoose 9 ODM
+- **Tools**: Git, GitHub, Thunder Client / Postman
 
-## Tech Stack
+---
 
-- **Frontend:** React.js, Vite
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB, Mongoose
-- **Authentication:** JWT, bcrypt
-- **Tools:** Git, GitHub, Thunder Client
+## ✨ Features
 
-## Project Structure
+- **User Authentication**: User registration and login with input validation and session token persistence in `localStorage`.
+- **Product Catalog & Details**: Browse products with pricing, categories, high-resolution images, descriptions, and real-time stock availability.
+- **Dynamic Search & Filtering**: Client-side reactive multi-attribute filtering by product name, category, price range, and star rating.
+- **Product Reviews & Ratings**: Submit customer reviews and star ratings with dynamic recalculation of average product rating.
+- **Shopping Cart**: Add items, adjust quantities, remove items, and calculate order totals with automatic stock limits.
+- **Order Management**: Checkout validation against real-time database stock, automatic inventory decrements, and historical order tracking.
+- **User Profile Management**: View profile details, update profile information using RESTful `PUT` and `PATCH` methods, and delete user accounts.
 
-```text
-ShoppingApp/
-│
-├── frontend/
-│
-├── backend/
-│
-├── .gitignore
-└── README.md
-```
+---
 
-## Team Members
+## 👥 Team Members & Roles
 
-| Name | Role |
-|---|---|
-| Sunil R | Backend Developer – Core Backend |
-| Prasanth M | Backend Developer – Profile, Cart & Orders |
-| Tarun S | Frontend Developer – Basic Pages |
-| Pratyussh T | Frontend Developer – Shopping Features |
+| Team Member | Role | Key Contributions |
+|---|---|---|
+| **Sunil R** | Backend Developer – Core Backend | Schemas (`User`, `Product`), database connection, seeding script (`seed.js`), authentication endpoints (`/api/users`, `/api/login`), product inventory APIs, and centralized error handling middleware. |
+| **Prasanth M** | Backend Developer – Profile, Cart & Orders | Profile management APIs (`PUT`, `PATCH`, `DELETE /api/users`), Order schema & checkout endpoints (`POST`, `GET /api/orders`), stock decrement logic, and Product Review APIs. |
+| **Tarun S** | Frontend Developer – Core UI & Auth | Registration and Login forms (`Register.jsx`, `Login.jsx`), Navigation Header (`Navbar.jsx`), Protected Route guards (`ProtectedRoute`), and user session handling. |
+| **Pratyussh T** | Frontend Developer – Shopping Features | Catalog browsing with live filters (`Products.jsx`, `SearchFilter.jsx`), Product detail view (`ProductDetails.jsx`), Cart context & checkout (`CartContext.jsx`, `Cart.jsx`), Order history (`OrderHistory.jsx`), and Profile UI (`Profile.jsx`). |
 
-## Getting Started
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
+- Node.js (v18+)
+- npm (v9+)
+- MongoDB running locally on `mongodb://127.0.0.1:27017`
 
-- Node.js
-- npm
-- MongoDB
-- Git
-
-### Setup
-
-Clone the repository:
-
-```bash
-git clone <repository-url>
-cd ShoppingApp
-```
-
-Install and start the backend:
-
+### 1. Backend Setup
 ```bash
 cd backend
 npm install
-npm run dev
+npm run seed     # Populate database with sample products
+npm run dev      # Server starts on http://localhost:5000
 ```
 
-Install and start the frontend in a separate terminal:
-
+### 2. Frontend Setup
+In a separate terminal:
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run dev      # Application runs on http://localhost:5173
 ```
 
-Configure the required environment variables in `.env` files before running the application.
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/users` | Register user |
-| POST | `/api/login` | User login |
-| GET | `/api/products` | Retrieve products |
-| PUT | `/api/users?emailId=...` | Update complete profile |
-| PATCH | `/api/users?emailId=...` | Update selected profile fields |
-| DELETE | `/api/users?emailId=...` | Delete user account |
-| POST | `/api/orders` | Place an order |
-| GET | `/api/orders` | Retrieve order history |
-| POST | `/api/products/:id/reviews` | Submit product review |
-| GET | `/api/products/:id/reviews` | Retrieve product reviews |
-
-## Development
-
-The project is developed collaboratively by four team members, with separate responsibilities for frontend and backend development.
-
-Individual features are integrated and tested to ensure the complete application works as expected.
